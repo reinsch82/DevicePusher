@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+using System.Collections.Specialized; // need to add System.Management to your project references.
+using System.Management;
 
 namespace DevicePusher {
-  using System;
-  using System.Collections.Generic;
-  using System.Collections.Specialized; // need to add System.Management to your project references.
-  using System.Management;
 
   class Program {
     static void Main(string[] args) {
       PushUSBDevices();
+
+
     }
 
-    static void PushUSBDevices() {
+    public static void PushUSBDevices() {
 
       ManagementObjectCollection collection;
       using (var searcher = new ManagementObjectSearcher(@"Select * From Win32_USBControllerDevice"))

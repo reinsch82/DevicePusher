@@ -1,0 +1,42 @@
+// NativePusher.idl : IDL source for NativePusher
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (NativePusher.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(a817e7a2-43fa-11d0-9e44-00aa00b6770a),
+	dual,	
+	pointer_default(unique)
+]
+interface IComponentRegistrar : IDispatch
+{
+	[id(1)]	HRESULT Attach([in] BSTR bstrPath);
+	[id(2)]	HRESULT RegisterAll();
+	[id(3)]	HRESULT UnregisterAll();
+	[id(4)]	HRESULT GetComponents([out] SAFEARRAY(BSTR)* pbstrCLSIDs, [out] SAFEARRAY(BSTR)* pbstrDescriptions);
+	[id(5)]	HRESULT RegisterComponent([in] BSTR bstrCLSID);
+	[id(6)] HRESULT UnregisterComponent([in] BSTR bstrCLSID);
+};
+
+[
+	uuid(B0BEE016-17F1-41CA-9284-71877E673B45),
+	version(1.0),
+	custom(a817e7a1-43fa-11d0-9e44-00aa00b6770a,"{3738C177-5750-4502-89EC-0C61E5EB2316}")
+]
+library NativePusherLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(3738C177-5750-4502-89EC-0C61E5EB2316)		
+	]
+	coclass CompReg
+	{
+		[default] interface IComponentRegistrar;
+	};
+};
+

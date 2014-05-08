@@ -5,3 +5,13 @@
 /DevicePusher/*.suo
 
 /DevicePusher/DevicePusher/*.user
+/DevicePusher/Debug
+/DevicePusher/*.opensdf
+/DevicePusher/*.sdf
+/DevicePusher/NativePusher/Debug
+/DevicePusher/NativePusher/DebugPS
+/DevicePusher/ipch/nativedevicepusher.exe-259d96f2/*.ipch
+/DevicePusher/nativeDevicePusher.exe/Debug/nativeDe.A7593FED.tlog
+/DevicePusher/nativeDevicePusher.exe/Debug
+/DevicePusher/ipch/nativepusher-5ba51b72/*.ipch
+/DevicePusher/trest/obj/Debug

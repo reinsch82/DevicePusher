@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DevicePusher")]
+[assembly: AssemblyTitle("trest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Borland")]
-[assembly: AssemblyProduct("DevicePusher")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("trest")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -17,10 +17,10 @@ using System.Runtime.InteropServices;
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(true)]
+[assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("30735f42-bce4-47c3-a1f3-27c6a25f1e3a")]
+[assembly: Guid("2e27b7c7-aafa-4749-8d38-de15c398d6c3")]
 
 // Version information for an assembly consists of the following four values:
 //
