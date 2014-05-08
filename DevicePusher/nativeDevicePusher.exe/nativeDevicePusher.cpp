@@ -8,8 +8,7 @@
 
 // This GUID is for all USB serial host PnP drivers, but you can replace it
 // with any valid device class guid.
-GUID WceusbshGUID = { 0xA5DCBF10L, 0x6530, 0x11D2, 0x90, 0x1F, 0x00, 
-0xC0, 0x4F, 0xB9, 0x51, 0xED };
+GUID WceusbshGUID = { 0xA5DCBF10L, 0x6530, 0x11D2, 0x90, 0x1F, 0x00, 0xC0, 0x4F, 0xB9, 0x51, 0xED };
 
 // For informational messages and window titles
 PWSTR g_pszAppName;
@@ -21,8 +20,7 @@ void ErrorHandler(LPTSTR lpszFunction);
 //
 // DoRegisterDeviceInterfaceToHwnd
 //
-BOOL DoRegisterDeviceInterfaceToHwnd(IN GUID InterfaceClassGuid, IN HWND hWnd,
-                                     OUT HDEVNOTIFY *hDeviceNotify)
+BOOL DoRegisterDeviceInterfaceToHwnd(IN GUID InterfaceClassGuid, IN HWND hWnd, OUT HDEVNOTIFY* hDeviceNotify)
 // Routine Description:
 //     Registers an HWND for notification of changes in the device interfaces
 //     for the specified interface class GUID.
@@ -51,11 +49,10 @@ BOOL DoRegisterDeviceInterfaceToHwnd(IN GUID InterfaceClassGuid, IN HWND hWnd,
   NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
   NotificationFilter.dbcc_classguid = InterfaceClassGuid;
 
-  *hDeviceNotify = RegisterDeviceNotification(
-      hWnd,                       // events recipient
-      &NotificationFilter,        // type of device
-      DEVICE_NOTIFY_WINDOW_HANDLE // type of recipient handle
-      );
+  *hDeviceNotify = RegisterDeviceNotification(hWnd,                       // events recipient
+                                              &NotificationFilter,        // type of device
+                                              DEVICE_NOTIFY_WINDOW_HANDLE // type of recipient handle
+                                              );
 
   if (NULL == *hDeviceNotify) {
     ErrorHandler(TEXT("RegisterDeviceNotification"));
@@ -100,8 +97,7 @@ void MessagePump(HWND hWnd)
 //
 // WinProcCallback
 //
-INT_PTR WINAPI
-WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+INT_PTR WINAPI WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 // Routine Description:
 //     Simple Windows callback for handling messages.
 //     This is where all the work is done because the example
@@ -145,11 +141,13 @@ WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     //
     hEditWnd = CreateWindow(TEXT("EDIT"), // predefined class
                             NULL,         // no window title
-                            WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT |
-                                ES_MULTILINE | ES_AUTOVSCROLL,
-                            0, 0, 0, 0, // set size in WM_SIZE message
-                            hWnd,       // parent window
-                            (HMENU)1,   // edit control ID
+                            WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
+                            0,
+                            0,
+                            0,
+                            0,        // set size in WM_SIZE message
+                            hWnd,     // parent window
+                            (HMENU)1, // edit control ID
                             (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
                             NULL); // pointer not needed
 
@@ -159,8 +157,7 @@ WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       ExitProcess(1);
     }
     // Add text to the window.
-    SendMessage(hEditWnd, WM_SETTEXT, 0,
-                (LPARAM)TEXT("Registered for USB device notification...\n"));
+    SendMessage(hEditWnd, WM_SETTEXT, 0, (LPARAM)TEXT("Registered for USB device notification...\n"));
 
     break;
 
@@ -171,7 +168,9 @@ WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   case WM_SIZE:
     // Make the edit control the size of the window's client area.
-    MoveWindow(hEditWnd, 0, 0, // starting x- and y-coordinates
+    MoveWindow(hEditWnd,
+               0,
+               0,              // starting x- and y-coordinates
                LOWORD(lParam), // width of client area
                HIWORD(lParam), // height of client area
                TRUE);          // repaint window
@@ -194,26 +193,39 @@ WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     // Output some messages to the window.
     switch (wParam) {
-    case DBT_DEVICEARRIVAL:
+    case DBT_DEVICEARRIVAL: { 
       msgCount++;
-      StringCchPrintf(strBuff, 256, TEXT("Message %d: DBT_DEVICEARRIVAL\n"),
-                      msgCount);
-      break;
+      StringCchPrintf(strBuff, 256, TEXT("Message %d: DBT_DEVICEARRIVAL\n"), msgCount);
+      STARTUPINFO si = {0};
+      si.cb = sizeof(si);
+      PROCESS_INFORMATION pi = { 0 };
+      // Start the child process. 
+      CreateProcess(L"DevicePusher.exe",   // No module name (use command line)
+                    L"",        // Command line
+                    NULL,           // Process handle not inheritable
+                    NULL,           // Thread handle not inheritable
+                    FALSE,          // Set handle inheritance to FALSE
+                    0,              // No creation flags
+                    NULL,           // Use parent's environment block
+                    NULL,           // Use parent's starting directory 
+                    &si,            // Pointer to STARTUPINFO structure
+                    &pi);           // Pointer to PROCESS_INFORMATION structure
+    }break;
     case DBT_DEVICEREMOVECOMPLETE:
       msgCount++;
-      StringCchPrintf(strBuff, 256,
-                      TEXT("Message %d: DBT_DEVICEREMOVECOMPLETE\n"), msgCount);
+      StringCchPrintf(strBuff, 256, TEXT("Message %d: DBT_DEVICEREMOVECOMPLETE\n"), msgCount);
       break;
     case DBT_DEVNODES_CHANGED:
       msgCount++;
-      StringCchPrintf(strBuff, 256, TEXT("Message %d: DBT_DEVNODES_CHANGED\n"),
-                      msgCount);
+      StringCchPrintf(strBuff, 256, TEXT("Message %d: DBT_DEVNODES_CHANGED\n"), msgCount);
       break;
     default:
       msgCount++;
-      StringCchPrintf(strBuff, 256, TEXT("Message %d: WM_DEVICECHANGE message ") 
-                                         TEXT("received, value %d unhandled.\n"),
-                      msgCount, wParam);
+      StringCchPrintf(strBuff,
+                      256,
+                      TEXT("Message %d: WM_DEVICECHANGE message ") TEXT("received, value %d unhandled.\n"),
+                      msgCount,
+                      wParam);
       break;
     }
     OutputMessage(hEditWnd, wParam, (LPARAM)strBuff);
@@ -286,14 +298,15 @@ BOOL InitWindowClass()
 
 int __stdcall _tWinMain(HINSTANCE hInstanceExe,
                         HINSTANCE, // should not reference this parameter
-                        PTSTR lpstrCmdLine, int nCmdShow) {
+                        PTSTR lpstrCmdLine,
+                        int nCmdShow) {
   //
   // To enable a console project to compile this code, set
   // Project->Properties->Linker->System->Subsystem: Windows.
   //
 
   int nArgC = 0;
-  PWSTR *ppArgV = CommandLineToArgvW(lpstrCmdLine, &nArgC);
+  PWSTR* ppArgV = CommandLineToArgvW(lpstrCmdLine, &nArgC);
   g_pszAppName = ppArgV[0];
 
   if (!InitWindowClass()) {
@@ -303,10 +316,18 @@ int __stdcall _tWinMain(HINSTANCE hInstanceExe,
 
   // Main app window
 
-  HWND hWnd = CreateWindowEx(WS_EX_CLIENTEDGE | WS_EX_APPWINDOW, WND_CLASS_NAME,
-                             g_pszAppName, WS_OVERLAPPEDWINDOW, // style
-                             CW_USEDEFAULT, 0, 640, 480, NULL, NULL,
-                             hInstanceExe, NULL);
+  HWND hWnd = CreateWindowEx(WS_EX_CLIENTEDGE | WS_EX_APPWINDOW,
+                             WND_CLASS_NAME,
+                             g_pszAppName,
+                             WS_OVERLAPPEDWINDOW, // style
+                             CW_USEDEFAULT,
+                             0,
+                             640,
+                             480,
+                             NULL,
+                             NULL,
+                             hInstanceExe,
+                             NULL);
 
   if (hWnd == NULL) {
     ErrorHandler(TEXT("CreateWindowEx: main appwindow hWnd"));
@@ -315,7 +336,7 @@ int __stdcall _tWinMain(HINSTANCE hInstanceExe,
 
   // Actually draw the window.
 
-  ShowWindow(hWnd, SW_SHOWNORMAL);
+  //ShowWindow(hWnd, SW_SHOWNORMAL);
   UpdateWindow(hWnd);
 
   // The message pump loops until the window is destroyed.
@@ -419,19 +440,24 @@ void ErrorHandler(LPTSTR lpszFunction)
   LPVOID lpDisplayBuf;
   DWORD dw = GetLastError();
 
-  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-                    FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                (LPTSTR) & lpMsgBuf, 0, NULL);
+  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL,
+                dw,
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                (LPTSTR) & lpMsgBuf,
+                0,
+                NULL);
 
   // Display the error message and exit the process.
 
   lpDisplayBuf =
-      (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) +
-                                         lstrlen((LPCTSTR)lpszFunction) + 40) *
-                                            sizeof(TCHAR));
-  StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-                  TEXT("%s failed with error %d: %s"), lpszFunction, dw,
+    (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+                       (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
+  StringCchPrintf((LPTSTR)lpDisplayBuf,
+                  LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                  TEXT("%s failed with error %d: %s"),
+                  lpszFunction,
+                  dw,
                   lpMsgBuf);
   MessageBox(NULL, (LPCTSTR)lpDisplayBuf, g_pszAppName, MB_OK);
 

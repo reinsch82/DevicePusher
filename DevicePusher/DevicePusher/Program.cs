@@ -12,8 +12,6 @@ namespace DevicePusher {
   class Program {
     static void Main(string[] args) {
       PushUSBDevices();
-
-
     }
 
     public static void PushUSBDevices() {
@@ -42,15 +40,26 @@ namespace DevicePusher {
           Console.WriteLine("Device Version ID & Vendor ID = " + arrDeviceID[1]);
           Console.WriteLine("Device Name = " + mobj["Name"].ToString());
           Console.WriteLine("System = " + mobj["SystemName"].ToString());
-          Console.WriteLine("Device ID = " + arrDeviceID[2].Trim('{', '}'));
+          var devId = arrDeviceID[2].Trim('{', '}');
+          var splitId = devId.Split('&');
+          if (splitId.Length > 1) {
+            devId = splitId[0] + splitId[1];
+          }
+          Console.WriteLine("Device ID = " + devId);
           Console.WriteLine("\n");
-          using (var client = new System.Net.WebClient()) {
-            var data = new NameValueCollection();
-            data["device"] = mobj["Name"].ToString();
-            data["system"] = mobj["SystemName"].ToString();
-            data["id"] = arrDeviceID[2].Trim('{', '}');
+          try {
+            using (var client = new System.Net.WebClient()) {
+              var data = new NameValueCollection();
+              data["device"] = mobj["Name"].ToString();
+              data["system"] = mobj["SystemName"].ToString();
+              data["id"] = devId;
 
-            var response = client.UploadValues("http://lnz-Reinholdd:9000/setDevice/", "POST", data);
+              var response = client.UploadValues("http://lnz-Reinholdd:9000/setDevice/", "POST", data);
+            }
+
+          }
+          catch (Exception) {
+            Console.WriteLine("unknown device");
           }
         }
       }
