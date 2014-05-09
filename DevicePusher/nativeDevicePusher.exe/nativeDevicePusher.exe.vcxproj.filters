@@ -27,7 +27,7 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nativeDevicePusher.exe.h">
+    <ClInclude Include="nativeDevicePusher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nativeDevicePusher.exe.cpp">
+    <ClCompile Include="nativeDevicePusher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

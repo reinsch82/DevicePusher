@@ -5,13 +5,15 @@
 #include <tchar.h>
 #include <strsafe.h>
 #include <dbt.h>
+#include <string>
 
 // This GUID is for all USB serial host PnP drivers, but you can replace it
 // with any valid device class guid.
 GUID WceusbshGUID = { 0xA5DCBF10L, 0x6530, 0x11D2, 0x90, 0x1F, 0x00, 0xC0, 0x4F, 0xB9, 0x51, 0xED };
 
 // For informational messages and window titles
-PWSTR g_pszAppName;
+auto g_pszAppName = L"Silk Device Pusher";
+wchar_t* g_server = L"";
 
 // Forward declarations
 void OutputMessage(HWND hOutWnd, WPARAM wParam, LPARAM lParam);
@@ -92,6 +94,25 @@ void MessagePump(HWND hWnd)
       DispatchMessage(&msg);
     }
   }
+}
+
+void PushDevices() {
+  STARTUPINFO si = { 0 };
+  si.cb = sizeof(si);
+  PROCESS_INFORMATION pi = { 0 };
+  // Start the child process. 
+  std::wstring cmdLine(L"DevicePusher.exe ");
+  cmdLine += g_server;
+  CreateProcess(nullptr,   // No module name (use command line)
+                &cmdLine[0],        // Command line
+                NULL,           // Process handle not inheritable
+                NULL,           // Thread handle not inheritable
+                FALSE,          // Set handle inheritance to FALSE
+                0,              // No creation flags
+                NULL,           // Use parent's environment block
+                NULL,           // Use parent's starting directory 
+                &si,            // Pointer to STARTUPINFO structure
+                &pi);           // Pointer to PROCESS_INFORMATION structure
 }
 
 //
@@ -196,20 +217,7 @@ INT_PTR WINAPI WinProcCallback(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     case DBT_DEVICEARRIVAL: { 
       msgCount++;
       StringCchPrintf(strBuff, 256, TEXT("Message %d: DBT_DEVICEARRIVAL\n"), msgCount);
-      STARTUPINFO si = {0};
-      si.cb = sizeof(si);
-      PROCESS_INFORMATION pi = { 0 };
-      // Start the child process. 
-      CreateProcess(L"DevicePusher.exe",   // No module name (use command line)
-                    L"",        // Command line
-                    NULL,           // Process handle not inheritable
-                    NULL,           // Thread handle not inheritable
-                    FALSE,          // Set handle inheritance to FALSE
-                    0,              // No creation flags
-                    NULL,           // Use parent's environment block
-                    NULL,           // Use parent's starting directory 
-                    &si,            // Pointer to STARTUPINFO structure
-                    &pi);           // Pointer to PROCESS_INFORMATION structure
+      PushDevices();
     }break;
     case DBT_DEVICEREMOVECOMPLETE:
       msgCount++;
@@ -307,13 +315,16 @@ int __stdcall _tWinMain(HINSTANCE hInstanceExe,
 
   int nArgC = 0;
   PWSTR* ppArgV = CommandLineToArgvW(lpstrCmdLine, &nArgC);
-  g_pszAppName = ppArgV[0];
+  if(nArgC >= 1) {
+    g_server = ppArgV[0];
+  }
 
   if (!InitWindowClass()) {
     // InitWindowClass displays any errors
     return -1;
   }
 
+  PushDevices();
   // Main app window
 
   HWND hWnd = CreateWindowEx(WS_EX_CLIENTEDGE | WS_EX_APPWINDOW,

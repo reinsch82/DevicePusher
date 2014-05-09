@@ -11,10 +11,10 @@ namespace DevicePusher {
 
   class Program {
     static void Main(string[] args) {
-      PushUSBDevices();
+      PushUSBDevices(args);
     }
 
-    public static void PushUSBDevices() {
+    public static void PushUSBDevices(string[] args) {
 
       ManagementObjectCollection collection;
       using (var searcher = new ManagementObjectSearcher(@"Select * From Win32_USBControllerDevice"))
@@ -46,7 +46,6 @@ namespace DevicePusher {
             devId = splitId[0] + splitId[1];
           }
           Console.WriteLine("Device ID = " + devId);
-          Console.WriteLine("\n");
           try {
             using (var client = new System.Net.WebClient()) {
               var data = new NameValueCollection();
@@ -54,13 +53,16 @@ namespace DevicePusher {
               data["system"] = mobj["SystemName"].ToString();
               data["id"] = devId;
 
-              var response = client.UploadValues("http://lnz-Reinholdd:9000/setDevice/", "POST", data);
+              Console.WriteLine(args);
+              var response = client.UploadValues(args[0] + "/setDevice/", "POST", data);
             }
 
           }
-          catch (Exception) {
+          catch (Exception e) {
+            Console.WriteLine(e.ToString());
             Console.WriteLine("unknown device");
           }
+          Console.WriteLine("\n");
         }
       }
 
