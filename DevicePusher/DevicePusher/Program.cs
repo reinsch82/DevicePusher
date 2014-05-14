@@ -40,10 +40,11 @@ namespace DevicePusher {
           Console.WriteLine("Device Version ID & Vendor ID = " + arrDeviceID[1]);
           Console.WriteLine("Device Name = " + mobj["Name"].ToString());
           Console.WriteLine("System = " + mobj["SystemName"].ToString());
+          Console.WriteLine("PNP id = " + mobj["PNPDeviceID"].ToString());
           var devId = arrDeviceID[2].Trim('{', '}');
           var splitId = devId.Split('&');
           if (splitId.Length > 1) {
-            devId = splitId[0] + splitId[1];
+            devId = splitId[1];
           }
           Console.WriteLine("Device ID = " + devId);
           try {
@@ -58,8 +59,7 @@ namespace DevicePusher {
             }
 
           }
-          catch (Exception e) {
-            Console.WriteLine(e.ToString());
+          catch (Exception) {
             Console.WriteLine("unknown device");
           }
           Console.WriteLine("\n");
