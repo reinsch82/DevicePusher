@@ -1,0 +1,8 @@
+﻿<Window x:Class="DevicePusher.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" SourceInitialized="MainWindow_OnSourceInitialized"
+        Title="MainWindow" Height="350" Width="525" Visibility="Visible">
+    <Grid>
+        
+    </Grid>
+</Window>
