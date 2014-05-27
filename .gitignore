@@ -24,3 +24,4 @@
 /DevicePusher/DevicePusher.UI/*.user
 /DevicePusher/DevicePusher.UI/DevicePusher.UI_TemporaryKey.pfx
 /DevicePusher/DevicePusher.UI/publish
+/DevicePusher/trest/bin/Debug
