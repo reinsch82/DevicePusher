@@ -15,3 +15,12 @@
 /DevicePusher/nativeDevicePusher.exe/Debug
 /DevicePusher/ipch/nativepusher-5ba51b72/*.ipch
 /DevicePusher/trest/obj/Debug
+/DevicePusher/DevicePusher.Library/bin/Debug
+/DevicePusher/DevicePusher.Library/obj/Debug
+/DevicePusher/DevicePusher.UI/bin/Debug
+/DevicePusher/DevicePusher.UI/obj/Debug
+/DevicePusher/NativeDevicePusher.Main/bin/Debug
+/DevicePusher/NativeDevicePusher.Main/obj/Debug
+/DevicePusher/DevicePusher.UI/*.user
+/DevicePusher/DevicePusher.UI/DevicePusher.UI_TemporaryKey.pfx
+/DevicePusher/DevicePusher.UI/publish
