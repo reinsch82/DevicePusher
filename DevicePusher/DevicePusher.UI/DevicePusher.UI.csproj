@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>SilkTest.ico</ApplicationIcon>
+    <ApplicationIcon>MobileDevice.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -105,10 +105,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="SilkTest.ico" />
+    <Resource Include="MobileDevice_16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MobileDevice_16x16.png" />
+    <Resource Include="MobileDevice.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
