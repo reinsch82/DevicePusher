@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Application;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -27,9 +28,9 @@ namespace DevicePusher.UI {
 
     public MainWindow() {
       InitializeComponent();
-      _notifyIcon = new NotifyIcon { BalloonTipIcon = ToolTipIcon.Info, Text = Properties.Resources.NotifyIcon };
+      var toolTipText = string.Format("{0} ({1})", Properties.Resources.NotifyIcon, ApplicationDeployment.IsNetworkDeployed ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : "debug");
+      _notifyIcon = new NotifyIcon { BalloonTipIcon = ToolTipIcon.Info, Text =  toolTipText};
       SetNotifyIcon("MobileDevice_16x16.png");
-
     }
 
     private void SetNotifyIcon(string sIcon) {
